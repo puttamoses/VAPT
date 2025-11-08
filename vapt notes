@@ -59,6 +59,47 @@ API VAPT	Tests API endpoints for authentication, authorization, and data exposur
 
 
 
+🔴 Red Team – Attackers
+
+Think of them as ethical hackers.
+
+Their job is to attack systems (legally) just like real cybercriminals would.
+
+Purpose: Find weaknesses before real hackers do.
+
+Example: They try to hack into a company’s server or steal fake passwords to test defenses.
+
+🔵 Blue Team – Defenders
+
+They are the security protectors of the organization.
+
+Their job is to detect, stop, and respond to attacks.
+
+Purpose: Protect systems, data, and networks.
+
+Example: They monitor systems, block attacks, and fix security gaps.
+
+🟣 Purple Team – Bridge Between Red and Blue
+
+They connect the Red and Blue Teams.
+
+Their job is to help both teams work together and learn from each other.
+
+Purpose: Improve security faster by sharing attack and defense knowledge.
+
+Example: After an attack simulation, they analyze what happened and help fix weak points.
+
+💡 In Short:
+Team	Main Role	Acts Like
+🔴 Red	Attacks to test security	Hacker
+🔵 Blue	Defends against attacks	Security guard
+🟣 Purple	Helps both improve	Coach / Mediator
+
+
+
+
+
+
 🌐 OSI Layers (Open Systems Interconnection Model)
 Definition:
 The OSI Model is a conceptual framework that describes how data moves from one computer to another across a network.
