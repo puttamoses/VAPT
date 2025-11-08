@@ -96,6 +96,42 @@ Team	Main Role	Acts Like
 🟣 Purple	Helps both improve	Coach / Mediator
 
 
+💻 Types of Hackers
+⚫ Black Hat Hackers (Bad Hackers)
+
+Illegal hackers who break into systems for personal gain, money, or malicious intent.
+
+They steal data, spread malware, or damage systems.
+
+Work without permission.
+
+🧠 Example: A hacker who steals credit card data or leaks private information.
+
+⚪ White Hat Hackers (Good Hackers)
+
+Also called Ethical Hackers.
+
+They hack with permission to help organizations find and fix vulnerabilities.
+
+Often part of Red Teams or security testing teams.
+
+🧠 Example: A cybersecurity professional who tests a company’s website for weaknesses to make it safer.
+
+⚫⚪ Gray Hat Hackers (In Between)
+
+Hack without permission but not always for harm.
+
+They might find a bug and tell the company — but since they accessed it without permission, it’s still technically illegal.
+
+🧠 Example: A hacker who discovers a flaw in a bank’s website and reports it — but didn’t get approval first.
+
+🧩 Quick Comparison:
+Type	Legal?	Motivation	Example
+⚪ White Hat	✅ Legal	Help improve security	Ethical hacker hired by company
+⚫ Black Hat	❌ Illegal	Steal, damage, profit	Data thief or ransomware hacker
+⚫⚪ Gray Hat	⚠️ Not legal but not harmful	Curiosity / attention	Finds bugs without permission
+
+
 
 
 
