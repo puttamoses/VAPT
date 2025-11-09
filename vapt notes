@@ -262,5 +262,98 @@ Availability: ATMs and online banking must always work.
 
 If any one fails, the system’s security is compromised.
 
-✅ This version is grammatically correct, neatly spaced, and visually structured for professional notes, interviews, or PDF conversion.
-Would you like me to format it into a printable PDF (with colored headers, icons, and tables for clarity)? It’ll look like a proper cybersecurity reference guide.
+🌐 OSI Model (Open Systems Interconnection Model)
+
+The OSI model explains how data moves through a network — from your computer to another device — in 7 layers.
+Each layer has a specific job, and attackers can target each layer differently to steal, change, or block data.
+
+🧩 1️⃣ Physical Layer
+
+Function: Sends raw bits (0s and 1s) over cables or Wi-Fi.
+Attacks:
+
+Wiretapping / Sniffing: Attacker physically connects to cables or Wi-Fi to capture signals.
+
+Jamming: Blocks or interferes with wireless signals.
+Goal: Steal data directly from the physical connection.
+Prevention: Lock network rooms, disable unused ports, use encrypted communication (like HTTPS or VPN).
+
+🧩 2️⃣ Data Link Layer
+
+Function: Moves data within the same local network using MAC addresses.
+Attacks:
+
+MAC Spoofing: Attacker changes their MAC address to impersonate another device.
+
+ARP Poisoning: Redirects traffic through the attacker.
+Goal: Intercept or control local network communication.
+Prevention: Use port security, VLANs, and ARP protection on switches.
+
+🧩 3️⃣ Network Layer
+
+Function: Handles IP addresses and routing of data between networks.
+Attacks:
+
+IP Spoofing: Fake IP address to hide identity or bypass firewalls.
+
+Man-in-the-Middle: Attacker sits between two systems and reads or changes data.
+Goal: Misdirect or intercept data while it travels across networks.
+Prevention: Use firewalls, VPNs, and secure routing protocols.
+
+🧩 4️⃣ Transport Layer
+
+Function: Ensures reliable communication (using TCP/UDP).
+Attacks:
+
+DDoS / SYN Flood: Floods a server with fake requests to crash it.
+
+Session Hijacking: Attacker takes control of an ongoing connection.
+Goal: Disrupt or take over communication sessions.
+Prevention: Use firewalls, rate limiting, and encryption (TLS).
+
+🧩 5️⃣ Session Layer
+
+Function: Starts, manages, and ends connections (sessions) between apps.
+Attacks:
+
+Session Hijacking / Sidejacking: Steals session tokens or cookies to impersonate a user.
+Goal: Take control of user sessions.
+Prevention: Use HTTPS, secure cookies, and MFA.
+
+🧩 6️⃣ Presentation Layer
+
+Function: Converts, encrypts, or compresses data for apps (formats, SSL/TLS).
+Attacks:
+
+SSL Stripping: Converts HTTPS to HTTP to read data in plain text.
+
+Malware Injection: Inserts harmful code in files or formats.
+Goal: Remove encryption or inject bad data.
+Prevention: Use strong TLS encryption and keep software updated.
+
+🧩 7️⃣ Application Layer
+
+Function: Closest to the user — includes browsers, email, websites, etc.
+Attacks:
+
+SQL Injection, XSS, Phishing, Malware.
+Goal: Steal data or trick users.
+Prevention: Input validation, security updates, and user awareness.
+
+🧠 Easy Way to Remember the Layers
+
+👉 “Please Do Not Throw Sausage Pizza Away”
+
+Physical
+
+Data Link
+
+Network
+
+Transport
+
+Session
+
+Presentation
+
+Application
