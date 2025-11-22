@@ -357,3 +357,131 @@ Session
 Presentation
 
 Application
+
+
+
+1️⃣ What is 3-Tier Architecture?
+3-Tier Architecture = a common web application architecture where the application is divided into three independent layers.
+🔹 Tier 1: Presentation Layer (Client/UI)
+•	Browser, mobile app, frontend
+•	Sends HTTP/HTTPS requests to server
+•	Displays UI to users
+Technologies: HTML, CSS, JavaScript, React, Angular, Vue
+________________________________________
+🔹 Tier 2: Application Layer (Backend / Server Layer)
+•	Processes client requests
+•	Business logic, validation, authentication
+•	Generates responses
+Frameworks: Node.js, Spring Boot, Django, Flask, Laravel
+________________________________________
+🔹 Tier 3: Data Layer (Database)
+•	Stores persistent data
+DB Types: MySQL, PostgreSQL, Oracle, MongoDB, Redis
+________________________________________
+⭐ Security Benefit
+Clear separation →
+•	Easier access control
+•	Protection of database
+•	Layer-wise security hardening
+✔ Your content is correct.
+________________________________________
+2️⃣ HTTP Request Methods (Correct & Completed)
+✔ 1. GET
+•	Retrieve data
+•	No request body
+•	Data visible in URL
+Safe + Idempotent
+________________________________________
+✔ 2. POST
+•	Create a new resource
+•	Data in body
+•	Not idempotent
+________________________________________
+✔ 3. PUT
+•	Replace entire existing resource
+•	Idempotent
+•	If field missing → removed
+________________________________________
+✔ 4. PATCH
+•	Partial update
+•	Only updates provided fields
+•	Not idempotent (usually)
+________________________________________
+✔ 5. DELETE
+•	Deletes a resource
+•	Idempotent (mostly)
+________________________________________
+✔ 6. HEAD
+•	Same as GET but no body
+•	Used for checking resource existence
+________________________________________
+✔ 7. OPTIONS
+•	Shows allowed HTTP methods
+•	Used in CORS preflight
+________________________________________
+✔ 8. TRACE
+•	Returns the same request
+•	Only for debugging
+⚠️ Disabled on most servers (security risk)
+________________________________________
+✔ 9. CONNECT
+•	Opens a tunnel (mostly for HTTPS)
+•	Used by browsers/proxies
+✔ Everything you wrote here is correct.
+________________________________________
+3️⃣ HTTP Status Codes (Correct List)
+✔ 1xx — Informational
+•	100 Continue → Client can continue sending request
+________________________________________
+✔ 2xx — Success
+Code	Meaning
+200 OK	Request successful
+201 Created	New resource created
+204 No Content	Success but no response body
+________________________________________
+✔ 3xx — Redirection
+Code	Meaning
+301 Moved Permanently	
+302 Found (Temporary Redirect)	
+304 Not Modified	
+________________________________________
+✔ 4xx — Client Errors
+Code	Meaning
+400 Bad Request	Invalid syntax
+401 Unauthorized	Authentication required
+403 Forbidden	No permission
+404 Not Found	Resource missing
+409 Conflict	Duplicate or version conflict
+________________________________________
+✔ 5xx — Server Errors
+Code	Meaning
+500 Internal Server Error	Server crashed
+502 Bad Gateway	Bad response from upstream
+503 Service Unavailable	Server down/overloaded
+504 Gateway Timeout	Upstream server timeout
+✔ All correct.
+________________________________________
+4️⃣ HTTP Headers vs Body
+🔹 Headers
+Metadata about the request or response.
+Examples:
+•	Content-Type: application/json
+•	User-Agent: Chrome
+•	Accept: text/html
+•	Authorization: Bearer <token>
+•	Cookie: sessionid=xyz
+________________________________________
+🔹 Body
+Actual data sent or received.
+Request Body Example:
+username=moses&password=123
+Response Body Example:
+{ "status": "success", "id": 101 }
+✔ Correct.
+
+
+
+Session id and cookies
+“In any application, when I log in, the application verifies my user details and creates a session. The server stores the session ID along with the user details on the server, and only the session ID is sent back to the browser as a cookie.”
+
+
