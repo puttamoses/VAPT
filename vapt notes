@@ -481,7 +481,35 @@ Response Body Example:
 
 
 
-Session id and cookies
-“In any application, when I log in, the application verifies my user details and creates a session. The server stores the session ID along with the user details on the server, and only the session ID is sent back to the browser as a cookie.”
+🍪 Session ID & Cookies (Clear Explanation)
 
+When you login to a website, the server needs a way to remember you as you move from one page to another.
+This is done using sessions and cookies.
 
+🔐 What is a Session?
+
+A session is a temporary storage on the server that keeps user information after login.
+
+Example session data stored on the server:
+
+Key	Value
+session_id	abc123xyz
+user_id	101
+name	Moses
+role	user
+
+The session data stays on the server — safe and private.
+
+🍪 What is a Cookie?
+
+A cookie is a small piece of text stored in your browser.
+
+After login:
+
+The server creates a session.
+
+The server generates a unique Session ID.
+
+The server stores the Session ID + user details on the server.
+
+The server sends ONLY the Session ID back to your browser as a cookie.
